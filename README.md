@@ -595,7 +595,7 @@ git push
 
 ## 🧑‍‍💻 Author
 
-**Ravi Roshan Kumar**  
+**Ravi Raushan Kumar**  
 *M.Sc. Mathematics & Computing*  
 **IIT (ISM) Dhanbad**
 
