@@ -1,0 +1,29 @@
+# Virtual environment
+.venv/
+
+# Pytest cache
+.pytest_cache/
+
+# All folders and files ending with data
+data/
+
+# Generated CSV files (case-sensitive patterns)
+*.CSV
+*.csv
+*.png
+
+# PDF files
+*.pdf
+*.PDF
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary files
+tempCodeRunnerFile.python
