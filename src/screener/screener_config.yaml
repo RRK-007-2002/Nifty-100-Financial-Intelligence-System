@@ -1,0 +1,53 @@
+# config/screener_config.yaml
+# Analyst-editable. Every filter carries an explicit operator so
+# threshold direction/strictness is never implicit or guessed.
+#
+# Supported operators: ">", "<", ">=", "<=", "=="
+# Supported metrics (schema-native column names):
+#   return_on_equity_pct, debt_to_equity, free_cash_flow_cr,
+#   revenue_cagr_5yr, pat_cagr_5yr, operating_profit_margin_pct,
+#   interest_coverage, eps_cagr_5yr, asset_turnover,
+#   pe_ratio, pb_ratio, dividend_yield_pct, market_cap_crore,
+#   sales, net_profit
+#
+# Special rules (engine-level, always active, not configured here):
+#   - debt_to_equity filters auto-skip companies where broad_sector == "Financials"
+#   - interest_coverage filters treat icr_label == "Debt Free" as infinity
+
+presets:
+
+  Quality Compounder:
+    - {metric: return_on_equity_pct, operator: ">", value: 15}
+    - {metric: debt_to_equity, operator: "<", value: 1.0}
+    - {metric: free_cash_flow_cr, operator: ">", value: 0}
+    - {metric: revenue_cagr_5yr, operator: ">", value: 10}
+
+  Value Pick:
+    - {metric: pe_ratio, operator: "<", value: 20}
+    - {metric: pb_ratio, operator: "<", value: 3.0}
+    - {metric: debt_to_equity, operator: "<", value: 2.0}
+    - {metric: dividend_yield_pct, operator: ">", value: 1}
+
+  Growth Accelerator:
+    - {metric: pat_cagr_5yr, operator: ">", value: 20}
+    - {metric: revenue_cagr_5yr, operator: ">", value: 15}
+    - {metric: debt_to_equity, operator: "<", value: 2.0}
+
+  Dividend Champion:
+    - {metric: dividend_yield_pct, operator: ">", value: 2}
+    - {metric: dividend_payout_ratio_pct, operator: "<", value: 80}
+    - {metric: free_cash_flow_cr, operator: ">", value: 0}
+
+  Debt-Free Blue Chip:
+    - {metric: debt_to_equity, operator: "==", value: 0}
+    - {metric: return_on_equity_pct, operator: ">", value: 12}
+    - {metric: sales, operator: ">", value: 5000}
+
+  # Turnaround Watch is intentionally NOT listed here — it needs
+  # multi-year trend comparison (D/E YoY decline), which a static
+  # operator/value pair cannot express. Handled by
+  # compute_turnaround_watch() in engine.py, with these thresholds:
+  turnaround_watch:
+    revenue_cagr_3yr_min: 10
+    fcf_positive_required: true
+    de_must_decline_yoy: true
